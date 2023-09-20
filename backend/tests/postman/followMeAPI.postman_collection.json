@@ -1,0 +1,690 @@
+{
+	"info": {
+		"_postman_id": "bc38fbcd-24b5-49d3-bae4-dfd372f3ea5b",
+		"name": "followMeAPI",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "200",
+					"item": [
+						{
+							"name": "auth/login",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"pm.test(\"Body is correct\", function () {\r",
+											"    var jsonResponse = pm.response.json();\r",
+											"\r",
+											"    pm.expect(jsonResponse).to.have.property(\"success\");\r",
+											"    pm.expect(jsonResponse.success).to.equal(1);\r",
+											"    pm.expect(jsonResponse).to.have.property(\"token\");\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\":\"testUser@gmail.com\",\r\n    \"password\":\"testUser123456\"\r\n}"
+								},
+								"url": {
+									"raw": "https://followme-dev-les-2021.herokuapp.com/auth/login",
+									"protocol": "https",
+									"host": [
+										"followme-dev-les-2021",
+										"herokuapp",
+										"com"
+									],
+									"path": [
+										"auth",
+										"login"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "auth/register",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"pm.test(\"Body is correct\", function () {\r",
+											"    var jsonResponse = pm.response.json();\r",
+											"\r",
+											"    pm.expect(jsonResponse).to.have.property(\"success\");\r",
+											"    pm.expect(jsonResponse.success).to.equal(1);\r",
+											"    pm.expect(jsonResponse).to.have.property(\"token\");\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"username\":\"testUser7\",\r\n    \"email\":\"testUser7@gmail.com\",\r\n    \"password\":\"testUser123456\"\r\n}"
+								},
+								"url": {
+									"raw": "https://followme-dev-les-2021.herokuapp.com/auth/register",
+									"protocol": "https",
+									"host": [
+										"followme-dev-les-2021",
+										"herokuapp",
+										"com"
+									],
+									"path": [
+										"auth",
+										"register"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "auth/google",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"pm.test(\"Body is correct\", function () {\r",
+											"    var jsonResponse = pm.response.json();\r",
+											"\r",
+											"    pm.expect(jsonResponse).to.have.property(\"success\");\r",
+											"    pm.expect(jsonResponse.success).to.equal(1);\r",
+											"    pm.expect(jsonResponse).to.have.property(\"token\");\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"token\":\"\"\r\n}"
+								},
+								"url": {
+									"raw": "https://followme-dev-les-2021.herokuapp.com/auth/google",
+									"protocol": "https",
+									"host": [
+										"followme-dev-les-2021",
+										"herokuapp",
+										"com"
+									],
+									"path": [
+										"auth",
+										"google"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "400",
+					"item": [
+						{
+							"name": "auth/login - Malformed email",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"pm.test(\"Body is correct\", function () {\r",
+											"    var jsonResponse = pm.response.json();\r",
+											"\r",
+											"    pm.expect(jsonResponse).to.have.property(\"success\");\r",
+											"    pm.expect(jsonResponse.success).to.equal(0);\r",
+											"    pm.expect(jsonResponse).to.have.property(\"error\");\r",
+											"    pm.expect(jsonResponse.error).to.equal(\"Insert a valid email adress\");\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\":\"testUsergmail.com\",\r\n    \"password\":\"testUser123456\"\r\n}"
+								},
+								"url": {
+									"raw": "https://followme-dev-les-2021.herokuapp.com/auth/login",
+									"protocol": "https",
+									"host": [
+										"followme-dev-les-2021",
+										"herokuapp",
+										"com"
+									],
+									"path": [
+										"auth",
+										"login"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "auth/login - Malformed password",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"pm.test(\"Body is correct\", function () {\r",
+											"    var jsonResponse = pm.response.json();\r",
+											"\r",
+											"    pm.expect(jsonResponse).to.have.property(\"success\");\r",
+											"    pm.expect(jsonResponse.success).to.equal(0);\r",
+											"    pm.expect(jsonResponse).to.have.property(\"error\");\r",
+											"    pm.expect(jsonResponse.error).to.equal(\"Password must be between 7 to 20 characters which contain only characters, numeric digits and underscore and first character must be a letter\");\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\":\"testUser@gmail.com\",\r\n    \"password\":[\"testUser123456\"]\r\n}"
+								},
+								"url": {
+									"raw": "https://followme-dev-les-2021.herokuapp.com/auth/login",
+									"protocol": "https",
+									"host": [
+										"followme-dev-les-2021",
+										"herokuapp",
+										"com"
+									],
+									"path": [
+										"auth",
+										"login"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "auth/register - Malformed username",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"pm.test(\"Body is correct\", function () {\r",
+											"    var jsonResponse = pm.response.json();\r",
+											"\r",
+											"    pm.expect(jsonResponse).to.have.property(\"success\");\r",
+											"    pm.expect(jsonResponse.success).to.equal(0);\r",
+											"    pm.expect(jsonResponse).to.have.property(\"error\");\r",
+											"    pm.expect(jsonResponse.error).to.equal(\"Insert a valid username\");\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"username\":\"\",\r\n    \"email\":\"testUser3@gmail.com\",\r\n    \"password\":\"123456\"\r\n}"
+								},
+								"url": {
+									"raw": "https://followme-dev-les-2021.herokuapp.com/auth/register",
+									"protocol": "https",
+									"host": [
+										"followme-dev-les-2021",
+										"herokuapp",
+										"com"
+									],
+									"path": [
+										"auth",
+										"register"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "auth/register - Malformed email",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"pm.test(\"Body is correct\", function () {\r",
+											"    var jsonResponse = pm.response.json();\r",
+											"\r",
+											"    pm.expect(jsonResponse).to.have.property(\"success\");\r",
+											"    pm.expect(jsonResponse.success).to.equal(0);\r",
+											"    pm.expect(jsonResponse).to.have.property(\"error\");\r",
+											"    pm.expect(jsonResponse.error).to.equal(\"Insert a valid email adress\");\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"username\":\"testUser3\",\r\n    \"email\":\"testUser3@gmailcom\",\r\n    \"password\":\"123456\"\r\n}"
+								},
+								"url": {
+									"raw": "https://followme-dev-les-2021.herokuapp.com/auth/register",
+									"protocol": "https",
+									"host": [
+										"followme-dev-les-2021",
+										"herokuapp",
+										"com"
+									],
+									"path": [
+										"auth",
+										"register"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "auth/register - Malformed password",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"pm.test(\"Body is correct\", function () {\r",
+											"    var jsonResponse = pm.response.json();\r",
+											"\r",
+											"    pm.expect(jsonResponse).to.have.property(\"success\");\r",
+											"    pm.expect(jsonResponse.success).to.equal(0);\r",
+											"    pm.expect(jsonResponse).to.have.property(\"error\");\r",
+											"    pm.expect(jsonResponse.error).to.equal(\"Password must be between 7 to 20 characters which contain only characters, numeric digits and underscore and first character must be a letter\");\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"username\":\"testUser3\",\r\n    \"email\":\"testUser3@gmail.com\",\r\n    \"password\":\"123456\"\r\n}"
+								},
+								"url": {
+									"raw": "https://followme-dev-les-2021.herokuapp.com/auth/register",
+									"protocol": "https",
+									"host": [
+										"followme-dev-les-2021",
+										"herokuapp",
+										"com"
+									],
+									"path": [
+										"auth",
+										"register"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "auth/google - Malformed token",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"pm.test(\"Body is correct\", function () {\r",
+											"    var jsonResponse = pm.response.json();\r",
+											"\r",
+											"    pm.expect(jsonResponse).to.have.property(\"success\");\r",
+											"    pm.expect(jsonResponse.success).to.equal(0);\r",
+											"    pm.expect(jsonResponse).to.have.property(\"error\");\r",
+											"    pm.expect(jsonResponse.error).to.equal(\"Insert a valid format token\");\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"token\":[\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c\"]\r\n}"
+								},
+								"url": {
+									"raw": "https://followme-dev-les-2021.herokuapp.com/auth/google",
+									"protocol": "https",
+									"host": [
+										"followme-dev-les-2021",
+										"herokuapp",
+										"com"
+									],
+									"path": [
+										"auth",
+										"google"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "401",
+					"item": [
+						{
+							"name": "auth/google",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 401\", function () {\r",
+											"    pm.response.to.have.status(401);\r",
+											"});\r",
+											"pm.test(\"Body is correct\", function () {\r",
+											"    var jsonResponse = pm.response.json();\r",
+											"\r",
+											"    pm.expect(jsonResponse).to.have.property(\"success\");\r",
+											"    pm.expect(jsonResponse.success).to.equal(0);\r",
+											"    pm.expect(jsonResponse).to.have.property(\"error\");\r",
+											"    pm.expect(jsonResponse.error).to.equal(\"Couldn't validate token\");\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"token\":\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c\"\r\n}"
+								},
+								"url": {
+									"raw": "https://followme-dev-les-2021.herokuapp.com/auth/google",
+									"protocol": "https",
+									"host": [
+										"followme-dev-les-2021",
+										"herokuapp",
+										"com"
+									],
+									"path": [
+										"auth",
+										"google"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "auth/login",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 401\", function () {\r",
+											"    pm.response.to.have.status(401);\r",
+											"});\r",
+											"pm.test(\"Body is correct\", function () {\r",
+											"    var jsonResponse = pm.response.json();\r",
+											"\r",
+											"    pm.expect(jsonResponse).to.have.property(\"success\");\r",
+											"    pm.expect(jsonResponse.success).to.equal(0);\r",
+											"    pm.expect(jsonResponse).to.have.property(\"error\");\r",
+											"    pm.expect(jsonResponse.error).to.equal(\"Wrong Credentials\");\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\":\"testUser@gmail.com\",\r\n    \"password\":\"testUser13456\"\r\n}"
+								},
+								"url": {
+									"raw": "https://followme-dev-les-2021.herokuapp.com/auth/login",
+									"protocol": "https",
+									"host": [
+										"followme-dev-les-2021",
+										"herokuapp",
+										"com"
+									],
+									"path": [
+										"auth",
+										"login"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "403",
+					"item": [
+						{
+							"name": "auth/register",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 403\", function () {\r",
+											"    pm.response.to.have.status(403);\r",
+											"});\r",
+											"pm.test(\"Body is correct\", function () {\r",
+											"    var jsonResponse = pm.response.json();\r",
+											"\r",
+											"    pm.expect(jsonResponse).to.have.property(\"success\");\r",
+											"    pm.expect(jsonResponse.success).to.equal(0);\r",
+											"    pm.expect(jsonResponse).to.have.property(\"error\");\r",
+											"    pm.expect(jsonResponse.error).to.equal(\"Account already exists\");\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"username\":\"UserTest\",\r\n    \"email\":\"testUser@gmail.com\",\r\n    \"password\":\"testUser123456\"\r\n}"
+								},
+								"url": {
+									"raw": "https://followme-dev-les-2021.herokuapp.com/auth/register",
+									"protocol": "https",
+									"host": [
+										"followme-dev-les-2021",
+										"herokuapp",
+										"com"
+									],
+									"path": [
+										"auth",
+										"register"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "bearer"
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}

@@ -1,0 +1,753 @@
+openapi: 3.0.0
+info: 
+  title: followMe API
+  version: v1
+servers: 
+  - url: http://localhost:7000
+components:
+    securitySchemes:
+      bearerAuth:
+        type: http
+        scheme: bearer
+        bearerFormat: JWT
+    schemas:
+      UserRegisterSchema:
+        type: object
+        required:
+          - username
+          - email
+          - password
+        properties:
+          username:
+            type: string
+            description: Username   
+          email:
+            type: string
+            description: Email
+          password:
+            type: string
+            description: Password
+        example:
+          username: TestUser
+          email: testUser@gmail.com
+          password: testUser123456
+          
+      UserLoginSchema:
+        type: object
+        required:
+          - email
+          - password
+        properties:    
+          email:
+            type: string
+            description: Email
+          password:
+            type: string
+            description: password
+        example:
+          email: testUser@gmail.com
+          password: testUser123456
+
+      GoogleTokenValidationSchema:
+        type: object
+        required:
+          - token
+        properties:    
+          token:
+            type: string
+            description: A valid Google signed JWT token
+        example:
+          token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjpbeyJfaWQiOiI2MDlmZTY5MGY2ODdkZjQ4ZDhmMDM1MDMiLCJDcmVhdGVkX2RhdGUiOiIyMDIxLTA1LTE1VDE1OjE5OjQ0LjQwOFoiLCJ1c2VybmFtZSI6IkJydW5vVXNlciIsImVtYWlsIjoiYmZyb2RyaWd1ZXMyMEBnbWFpbC5jb20iLCJwYXNzd29yZCI6IiQyYSQxMCR5ekouUkRBQXpGQ1k1U0lkeXpiQUV1YTYvM2lzaUphV2xTUTRjdFM1VngwTFQ5MWtQakMzaSIsInNhbGRvIjowLCJfX3YiOjB9XSwiaWF0IjoxNjIxMjY2NzUxLCJleHAiOjE2MjEyNzAzNTF9.oaK6mck-HgtyvChstaw4Fl13rsXYhqUb1kP2rGUjNFM
+      
+      GetRoutebyEmailSchema:
+        type: object
+        properties:
+          success:
+            type: integer
+            description: Success of the response
+          routes:
+            type: array
+            description: Array of routes
+            items:
+              type: object
+              properties:
+                reviews:
+                  type: array
+                  description: An array of reviews
+                _id:
+                  type: string
+                  description: Route Id
+                tags:
+                  type: array
+                  description: Array of tags
+                images:
+                  type: array
+                  description: Array of uploaded images
+                waypoints:
+                  type: array
+                  description: Array of waypoints (lat,long)
+                name:
+                  type: string
+                  description: Name of the route
+                description:
+                  type: string
+                  description: Description of the route
+                visibility:
+                  type: boolean
+                  description: Visibility state (Public/Private)
+                difficulty:
+                  type: integer
+                  description: Difficulty of the route (1 to 3)
+                rating:
+                  type: integer
+                  description: Rating (1 to 5)
+                distance:
+                  type: number
+                  description: Total distance of a route in km
+                city:
+                  type: string
+                  description: Route City
+                email:
+                  type: string
+                  description: User email that submitted the route
+
+        example:
+          success: 1
+          routes: [{reviews: [very nice,superb],_id: 61b34ece4b3494e7485aea5b,tags: [cairo,douro],images: [image1.png,image2.png],waypoints : [{ lat: 12,long: 47,_id: 61b34ece4b3494e7485aea47}],name: Route name,description: Some nice description,visibility: true,difficulty: 2,rating: 4,distance: 20,city: Cairo,email: testUser@gmail.com}]
+
+
+      GetUserInfoSchema:
+        type: object
+        properties:
+          success:
+            type: integer
+            description: Success of the response
+          user:
+            type: object
+            properties:
+              id:
+                type: string
+                description: User id
+              username:
+                type: string
+                description: Username
+              email:
+                type: string
+                description: User Email
+              picture:
+                type: string
+                description: User picture url path
+
+        example:
+          success: 1
+          user: {id: 61b31df11b7d7034d1535ea7,username: testUser1401,email: testUser@gmail.com,picture: https://followme-dev-les-2021.herokuapp.com/profiles/164012997814210.png}
+          
+      UpdateUserPictureSchema:
+        type: object
+        properties:
+          username:
+            type: string
+            description: Username to be updated
+          picture:
+            type: string
+            description: Base 64 encoded image to be updated
+        example:
+            username: testUser
+            picture: /9j/4AAQSkZJRgABAQEASABIAAD/4gxYSUNDX1BST0ZJTEUAAQEAAAxITGlubwIQAABtbnRyUkdCIFhZWiAHzgACAAkABgAxAABhY3NwT
+          
+          
+paths:
+    /auth/register:
+      post:
+        summary: Register a new user.
+        tags: [Authentication]
+        requestBody:
+           required: true
+           content:
+                application/json:
+                   schema:
+                     $ref: '#/components/schemas/UserRegisterSchema'
+        responses:
+           200:
+             description: User is registered sucessfully.A signed jwt token is returned.
+             content:
+                application/json:
+                    type: object
+                    properties:
+                      success:
+                        type: integer
+                        description: Success of the response
+                      token:
+                        type: string
+                        description: Jwt Token
+                    example:
+                      success: 1
+                      token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjpbeyJfaWQiOiI2MDlmZTY5MGY2ODdkZjQ4ZDhmMDM1MDMiLCJDcmVhdGVkX2RhdGUiOiIyMDIxLTA1LTE1VDE1OjE5OjQ0LjQwOFoiLCJ1c2VybmFtZSI6IkJydW5vVXNlciIsImVtYWlsIjoiYmZyb2RyaWd1ZXMyMEBnbWFpbC5jb20iLCJwYXNzd29yZCI6IiQyYSQxMCR5ekouUkRBQXpGQ1k1U0lkeXpiQUV1YTYvM2lzaUphV2xTUTRjdFM1VngwTFQ5MWtQakMzaSIsInNhbGRvIjowLCJfX3YiOjB9XSwiaWF0IjoxNjIxMjY2NzUxLCJleHAiOjE2MjEyNzAzNTF9.oaK6mck-HgtyvChstaw4Fl13rsXYhqUb1kP2rGUjNFM
+           400:
+             description: Malformed user input was found. An error message is returned
+             content:
+                application/json:
+                   type: object
+                   properties:
+                     success:
+                        type: integer
+                        description: Success of the reponse
+                     error:
+                        type: string
+                        description: Error message
+                   example:
+                      success: 0
+                      error: Insert a valid email address
+           403:
+              description: User already Exists. An error message is returned
+              content:
+                  application/json:
+                    type: object
+                    properties:
+                      success: integer
+                      error: string
+                    example:
+                      success: 0
+                      error: "Account already exists"
+           500:
+              description: An Internal Server Error or unhandled exception occurred
+              content:
+                  application/json:
+                    type: object
+                    properties:
+                      success: integer
+                      error: string
+                    example:
+                      success: 0
+                      error: "Internal Server Error"
+            
+    /auth/login:
+      post:
+        summary: Authenticate the user with credentials.
+        tags: [Authentication]
+        requestBody:
+           required: true
+           content:
+                application/json:
+                   schema:
+                     $ref: '#/components/schemas/UserLoginSchema'
+        responses:
+           200:
+             description: User signs in sucessfully.A signed jwt token is returned.
+             content:
+                application/json:
+                    type: object
+                    properties:
+                      success:
+                        type: integer
+                        description: 
+                      token:
+                        type: string
+                        description: JWT token
+                    example:
+                      success: 1
+                      token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjpbeyJfaWQiOiI2MDlmZTY5MGY2ODdkZjQ4ZDhmMDM1MDMiLCJDcmVhdGVkX2RhdGUiOiIyMDIxLTA1LTE1VDE1OjE5OjQ0LjQwOFoiLCJ1c2VybmFtZSI6IkJydW5vVXNlciIsImVtYWlsIjoiYmZyb2RyaWd1ZXMyMEBnbWFpbC5jb20iLCJwYXNzd29yZCI6IiQyYSQxMCR5ekouUkRBQXpGQ1k1U0lkeXpiQUV1YTYvM2lzaUphV2xTUTRjdFM1VngwTFQ5MWtQakMzaSIsInNhbGRvIjowLCJfX3YiOjB9XSwiaWF0IjoxNjIxMjY2NzUxLCJleHAiOjE2MjEyNzAzNTF9.oaK6mck-HgtyvChstaw4Fl13rsXYhqUb1kP2rGUjNFM
+
+           400:
+             description: Malformed userinput was found. An error message is returned
+             content:
+                application/json:
+                   type: object
+                   properties:
+                     success:
+                        type: integer
+                        description: Success of the reponse
+                     error:
+                        type: string
+                        description: Error message
+                   example:
+                      success: 0
+                      error: Insert a valid email address
+           401:
+             description: User input is correctly formatted but there are no matching credentials
+             content:
+                application/json:
+                   type: object
+                   properties:
+                     success:
+                        type: integer
+                        description: Success of the reponse
+                     error:
+                        type: string
+                        description: Error message
+                   example:
+                      success: 0
+                      error: Wrong credentials
+
+           500:
+              description: An Internal Server Error or unhandled exception occurred
+              content:
+                  application/json:
+                    type: object
+                    properties:
+                      success: integer
+                      error: string
+                    example:
+                      success: 0
+                      error: "Internal Server Error"
+    
+    /auth/google:
+      post:
+        summary: Validate google jwt token in order to provide a JWT token signed by this api and so, use it on future authorized requests
+        tags: [Authentication]
+        requestBody:
+           required: true
+           content:
+                application/json:
+                   schema:
+                     $ref: '#/components/schemas/GoogleTokenValidationSchema'
+        responses:
+           200:
+             description: Provided google JWT token was valid.A JWT token signed by this api is returned.
+             content:
+                application/json:
+                    type: object
+                    properties:
+                      success:
+                        type: integer
+                        description: 
+                      token:
+                        type: string
+                        description: JWT token
+                    example:
+                      success: 1
+                      token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjpbeyJfaWQiOiI2MDlmZTY5MGY2ODdkZjQ4ZDhmMDM1MDMiLCJDcmVhdGVkX2RhdGUiOiIyMDIxLTA1LTE1VDE1OjE5OjQ0LjQwOFoiLCJ1c2VybmFtZSI6IkJydW5vVXNlciIsImVtYWlsIjoiYmZyb2RyaWd1ZXMyMEBnbWFpbC5jb20iLCJwYXNzd29yZCI6IiQyYSQxMCR5ekouUkRBQXpGQ1k1U0lkeXpiQUV1YTYvM2lzaUphV2xTUTRjdFM1VngwTFQ5MWtQakMzaSIsInNhbGRvIjowLCJfX3YiOjB9XSwiaWF0IjoxNjIxMjY2NzUxLCJleHAiOjE2MjEyNzAzNTF9.oaK6mck-HgtyvChstaw4Fl13rsXYhqUb1kP2rGUjNFM
+
+           400:
+             description: A Malformed token was sent. An error message is returned
+             content:
+                application/json:
+                   type: object
+                   properties:
+                     success:
+                        type: integer
+                        description: Success of the reponse
+                     error:
+                        type: string
+                        description: Error message
+                   example:
+                      success: 0
+                      error: Insert a valid format token
+           401:
+             description: The token sent in the request is in the correct format but couldn't be verified either because is not correctly signed or the signature doesn't match Google or app client Id. An error message is returned
+             content:
+                application/json:
+                   type: object
+                   properties:
+                     success:
+                        type: integer
+                        description: Success of the reponse
+                     error:
+                        type: string
+                        description: Error message
+                   example:
+                      success: 0
+                      error: Couldn't validate token
+
+           500:
+              description: An Internal Server Error or unhandled exception occurred
+              content:
+                  application/json:
+                    type: object
+                    properties:
+                      success: integer
+                      error: string
+                    example:
+                      success: 0
+                      error: "Internal Server Error"
+    /routes/{email}:
+      get:
+        security:
+          - bearerAuth: []
+        
+        parameters:
+            - in: path
+              name: email
+              schema:
+                type: string
+              required: true
+              description: User email
+            - in: query
+              name: page
+              schema:
+                type: integer
+              required: true
+              description: Results page number (for lazyloading purposes)
+      
+        summary: Get the list of all routes inserted by a certain user
+        tags: [Routes]
+        responses:
+           200:
+             description: A list of routes is returned with all the information
+             content:
+                application/json:
+                    schema:
+                      $ref: '#/components/schemas/GetRoutebyEmailSchema'
+                        
+                      
+
+           400:
+             description: A Malformed request was sent. An error message is returned
+             content:
+                application/json:
+                   type: object
+                   properties:
+                     success:
+                        type: integer
+                        description: Success of the reponse
+                     error:
+                        type: string
+                        description: Error message
+                   example:
+                      success: 0
+                      error: Insert a valid email address
+           401:
+             description: The token sent in the request is incorrect or missing
+             content:
+                application/json:
+                   type: object
+                   properties:
+                     success:
+                        type: integer
+                        description: Success of the reponse
+                     error:
+                        type: string
+                        description: Error message
+                   example:
+                      success: 0
+                      error: Invalid Token
+
+           500:
+              description: An Internal Server Error or unhandled exception occurred
+              content:
+                  application/json:
+                    type: object
+                    properties:
+                      success: integer
+                      error: string
+                    example:
+                      success: 0
+                      error: "Internal Server Error"
+
+    /routes/filter:
+      get:
+          security:
+              - bearerAuth: []
+          
+          parameters:
+            - in: query
+              name: page
+              schema:
+                type: number
+                required: true
+                description: Results page number (for lazyloading purposes)
+            - in: query
+              name: lat
+              schema:
+                type: number
+                required: true
+                description: User current latitude
+            - in: query
+              name: lon
+              schema:
+                type: number
+                required: true
+                description: User current longitude
+            - in: query
+              name: distance
+              schema:
+                type: string
+                required: false
+                description: Maximum distance boundary for filtering
+            - in: query
+              name: difficulty
+              schema:
+                type: string
+                required: false
+                description: Filter routes by provided difficulty
+            - in: query
+              name: rating
+              schema:
+                type: string
+                required: false
+                description: Filter routes by provided rating
+            - in: query
+              name: city
+              schema:
+                type: string
+                required: false
+                description: Filter routes by provided city
+            - in: query
+              name: fromDistance
+              schema:
+                type: number
+                required: false
+                description: Filter routes by distance from user
+          summary: Get Routes by filtering according to specified criteria
+          tags: [Routes]
+          responses:
+            200:
+              description: A list of routes is provided according to filtering criteria
+              content:
+                  application/json:
+                      schema:
+                        $ref: '#/components/schemas/GetRoutebyEmailSchema'
+                  
+            400:
+             description: A Malformed request was sent. An error message is returned
+             content:
+                application/json:
+                   type: object
+                   properties:
+                     success:
+                        type: integer
+                        description: Success of the reponse
+                     error:
+                        type: string
+                        description: Error message
+                   example:
+                      success: 0
+                      error: Page number must be higher or equal to 1
+            401:
+             description: The token sent in the request is incorrect or missing
+             content:
+                application/json:
+                   type: object
+                   properties:
+                     success:
+                        type: integer
+                        description: Success of the reponse
+                     error:
+                        type: string
+                        description: Error message
+                   example:
+                      success: 0
+                      error: Invalid Token
+
+            500:
+              description: An Internal Server Error or unhandled exception occurred
+              content:
+                  application/json:
+                    type: object
+                    properties:
+                      success: integer
+                      error: string
+                    example:
+                      success: 0
+                      error: "Internal Server Error"
+
+            
+
+
+    /user/{email}:
+      get:
+          security:
+              - bearerAuth: []
+            
+          parameters:
+              - in: path
+                name: email
+                schema:
+                  type: string
+                required: true
+                description: User email
+          
+          summary: Get User info based on email
+          tags: [User]
+          responses:
+            200:
+              description: The user info is successfully returned
+              content:
+                  application/json:
+                    schema:
+                      $ref: '#/components/schemas/GetUserInfoSchema'
+            400:
+              description: A Malformed request was sent. An error message is returned
+              content:
+                  application/json:
+                    type: object
+                    properties:
+                      success:
+                          type: integer
+                          description: Success of the reponse
+                      error:
+                          type: string
+                          description: Error message
+                    example:
+                        success: 0
+                        error: Insert a valid email address
+            401:
+              description: The token sent in the request is incorrect or missing
+              content:
+                  application/json:
+                    type: object
+                    properties:
+                      success:
+                          type: integer
+                          description: Success of the reponse
+                      error:
+                          type: string
+                          description: Error message
+                    example:
+                        success: 0
+                        error: Invalid Token
+
+            500:
+                description: An Internal Server Error or unhandled exception occurred
+                content:
+                    application/json:
+                      type: object
+                      properties:
+                        success: integer
+                        error: string
+                      example:
+                        success: 0
+                        error: "Internal Server Error"
+
+      patch:  
+            security:
+                - bearerAuth: []
+                  
+            parameters:
+                - in: path
+                  name: email
+                  schema:
+                    type: string
+                  required: true
+                  description: User email
+                  
+            requestBody:
+                required: true
+                content:
+                  application/json:
+                    schema:
+                      $ref: '#/components/schemas/UpdateUserPictureSchema'
+
+                
+            summary: Update User info based on email
+            tags: [User]
+            responses:
+              200:
+                description: The user info is successfully returned
+                content:
+                    application/json:
+                      schema:
+                        $ref: '#/components/schemas/GetUserInfoSchema'
+
+            400:
+              description: A Malformed request was sent. An error message is returned
+              content:
+                  application/json:
+                    type: object
+                    properties:
+                      success:
+                          type: integer
+                          description: Success of the reponse
+                      error:
+                          type: string
+                          description: Error message
+                    example:
+                        success: 0
+                        error: Insert a valid email address
+            401:
+              description: The token sent in the request is incorrect or missing
+              content:
+                  application/json:
+                    type: object
+                    properties:
+                      success:
+                          type: integer
+                          description: Success of the reponse
+                      error:
+                          type: string
+                          description: Error message
+                    example:
+                        success: 0
+                        error: Invalid Token
+
+            500:
+                description: An Internal Server Error or unhandled exception occurred
+                content:
+                    application/json:
+                      type: object
+                      properties:
+                        success: integer
+                        error: string
+                      example:
+                        success: 0
+                        error: "Internal Server Error"          
+                        
+    /user/{email}/favourites:
+      get:
+          security:
+            - bearerAuth: []
+          
+          parameters:
+              - in: path
+                name: email
+                schema:
+                  type: string
+                required: true
+                description: User email
+        
+          summary: Get the list of all favourite routes of a given user
+          tags: [User]
+          responses:
+            200:
+              description: A list of routes is returned with all the information
+              content:
+                  application/json:
+                      schema:
+                        $ref: '#/components/schemas/GetRoutebyEmailSchema'
+                        
+            400:
+              description: A Malformed request was sent. An error message is returned
+              content:
+                  application/json:
+                    type: object
+                    properties:
+                      success:
+                          type: integer
+                          description: Success of the reponse
+                      error:
+                          type: string
+                          description: Error message
+                    example:
+                        success: 0
+                        error: Insert a valid email address
+            401:
+              description: The token sent in the request is incorrect or missing
+              content:
+                  application/json:
+                    type: object
+                    properties:
+                      success:
+                          type: integer
+                          description: Success of the reponse
+                      error:
+                          type: string
+                          description: Error message
+                    example:
+                        success: 0
+                        error: Invalid Token
+
+            500:
+                description: An Internal Server Error or unhandled exception occurred
+                content:
+                    application/json:
+                      type: object
+                      properties:
+                        success: integer
+                        error: string
+                      example:
+                        success: 0
+                        error: "Internal Server Error"
+      
+
+          
+                      
